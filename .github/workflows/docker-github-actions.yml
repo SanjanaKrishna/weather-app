@@ -30,7 +30,7 @@ jobs:
       - name: Build and Run Docker Compose
         run: docker compose up -d
 
-      - name: Wait for Containers to Start (Example: Wait for a specific service)
+      - name: Wait for Containers to Start
         run: |
           sleep 10 # Initial wait (adjust as needed)
           until docker inspect -f '{{.State.Running}}' $(docker ps -q --filter name=your-service-name); do
@@ -39,5 +39,5 @@ jobs:
           done
           echo "your-service-name is running!"
 
-       - name: Stop Containers
+       - name: Stop Containers 
          run: docker compose down
