@@ -7,7 +7,7 @@ on:
 
 jobs:
   docker-compose-run:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # ✅ Use self-hosted runner instead of GitHub-hosted
 
     steps:
       - name: Checkout Code
@@ -17,22 +17,27 @@ jobs:
         run: docker --version 
 
       - name: Check if Docker Compose is available (v2)
-        run: docker compose version
+        run: docker compose version || echo "Docker Compose V2 not installed"
 
-      - name: Install Docker Compose V1 (if needed)
+      - name: Install Docker Compose (if missing)
         run: |
-          if ! command -v docker-compose &> /dev/null; then
+          if ! command -v docker-compose &> /dev/null && ! command -v docker compose &> /dev/null; then
             echo "Docker Compose not found, installing..."
             sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
           fi
-          docker-compose --version
+          docker-compose --version || docker compose version
+
+      - name: Fetch Public IP of Self-Hosted Runner
+        run: |
+          PUBLIC_IP=$(curl -s ifconfig.me)
+          echo "Runner's Public IP: $PUBLIC_IP"
 
       - name: Build and Run Docker Compose
-        run: docker compose up -d  # Use 'docker compose' instead of 'docker-compose'
+        run: docker compose up -d || docker-compose up -d  # ✅ Supports both v1 & v2
 
       - name: Wait for the application to run (e.g., 30 seconds)
-        run: sleep 30  # This adds a 30-second delay
+        run: sleep 30  # Adds a delay for services to start
 
       - name: Stop Containers
-        run: docker compose down
+        run: docker compose down || docker-compose down  # ✅ Supports both versions
