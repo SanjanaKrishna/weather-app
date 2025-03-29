@@ -1,8 +1,9 @@
 name: docker-github-actions
-on:
+
+on: 
   push:
     branches:
-      - feature-1
+      - feature-1  
 
 jobs:
   docker-compose-run:
@@ -10,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3 
 
       - name: Check Docker version
-        run: docker --version
+        run: docker --version 
 
       - name: Check if Docker Compose is available (v2)
         run: docker compose version
@@ -28,16 +29,10 @@ jobs:
           docker-compose --version
 
       - name: Build and Run Docker Compose
-        run: docker compose up -d
+        run: docker compose up -d  # Use 'docker compose' instead of 'docker-compose'
 
-      - name: Wait for Containers to Start
-        run: |
-          sleep 10 # Initial wait (adjust as needed)
-          until docker inspect -f '{{.State.Running}}' $(docker ps -q --filter name=your-service-name); do
-            echo "Waiting for your-service-name to start..."
-            sleep 5 # Check every 5 seconds
-          done
-          echo "your-service-name is running!"
+      - name: Wait for the application to run (e.g., 30 seconds)
+        run: sleep 30  # This adds a 30-second delay
 
-       - name: Stop Containers 
-         run: docker compose down
+      - name: Stop Containers
+        run: docker compose down
