@@ -7,10 +7,9 @@ on:
 
 jobs:
   docker-compose-run:
-    runs-on: self-hosted  # ✅ Use self-hosted runner instead of GitHub-hosted
-
+    runs-on: self-hosted 
     steps:
-      - name: Fix repository permissions  # 🔧 Fix permission issues before checkout
+      - name: Fix repository permissions  
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/weather-app
           sudo chmod -R u+w /home/ubuntu/actions-runner/_work/weather-app
@@ -39,10 +38,10 @@ jobs:
           echo "Runner's Public IP: $PUBLIC_IP"
 
       - name: Build and Run Docker Compose
-        run: docker compose up -d || docker-compose up -d  # ✅ Supports both v1 & v2
+        run: docker compose up -d || docker-compose up -d  
 
       - name: Wait for the application to run (e.g., 30 seconds)
-        run: sleep 30  # Adds a delay for services to start
+        run: sleep 40  # Adds a delay for services to start
 
       - name: Stop Containers
-        run: docker compose down || docker-compose down  # ✅ Supports both versions
+        run: docker compose down || docker-compose down  
