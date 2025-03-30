@@ -34,9 +34,3 @@ jobs:
           docker-compose --version || docker compose version
 
       - name: Fetch Public IP of Self-Hosted Runner
-        run: |
-          PUBLIC_IP=$(curl -s ifconfig.me)
-          echo "Runner's Public IP: $PUBLIC_IP"
-
-      - name: Build and Run Docker Compose
-        run: docker compose up -d || docker-compose up -d  # ✅ Supports both v1 & v2
